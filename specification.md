@@ -1,0 +1,18 @@
+- organizes the directory it runs against into directories of the following categories:
+    - archives
+    - audios
+    - documents
+    - fonts
+    - others
+    - photos
+    - scripts
+    - videos
+    - zipped
+- runs on the following categorization modes:
+    - default, extension mode 
+    - magic number mode / file header mode
+- flags and args to modify behavior: 
+    - source directory
+    - destination directory
+    - mode
+    - whether to have empty directories or not

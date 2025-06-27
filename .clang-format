@@ -1,0 +1,26 @@
+BasedOnStyle: Mozilla
+Standard: c++17
+
+IndentWidth: 8
+UseTab: AlignWithSpaces
+
+ColumnLimit: 100
+
+BreakBeforeBraces: Linux
+InsertBraces: true
+
+SortIncludes: true
+SortUsingDeclarations: Lexicographic
+
+IncludeBlocks: Regroup
+
+SeparateDefinitionBlocks: Always
+
+AllowShortFunctionsOnASingleLine: Empty
+
+AlignEscapedNewlines: LeftWithLastLine
+
+BinPackArguments: false
+BinPackParameters: OnePerLine
+
+PointerAlignment: Right
