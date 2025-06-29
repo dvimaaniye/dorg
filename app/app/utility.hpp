@@ -1,38 +1,39 @@
 #pragma once
 
+#include <boost/algorithm/string/case_conv.hpp>
 #include <filesystem>
 #include <iostream>
 
 namespace fs = std::filesystem;
 
-inline int
-handle_destination_existence(const fs::path &destination_path)
+inline bool
+handle_directory_existence(const fs::path &directory_path)
 {
 	using std::cin, std::cout, std::cerr, std::endl;
-	if (!fs::exists(destination_path)) {
-		cerr << "Destination directory " << destination_path << " not found" << endl;
+	if (!fs::exists(directory_path)) {
+		cerr << "Directory " << directory_path << " not found" << endl;
 
-		char user_wants_dir = 'n';
+		std::string user_wants_dir;
 
 		cout << "Create it? [y/N] ";
-		cin >> user_wants_dir;
+		std::getline(cin, user_wants_dir);
+		boost::to_lower(user_wants_dir);
 
-		if (std::tolower(user_wants_dir) == 'y') {
-			cout << "Creating directory " << destination_path << endl;
-			fs::create_directory(destination_path);
+		if (user_wants_dir == "y") {
+			cout << "Creating directory " << directory_path << endl;
+			fs::create_directory(directory_path);
 		} else {
 			return EXIT_FAILURE;
 		}
-	}
-	if (!fs::is_directory(destination_path)) {
-		cerr << "Destination path " << destination_path << " is not a directory" << endl;
+	} else if (!fs::is_directory(directory_path)) {
+		cerr << directory_path << " is not a directory" << endl;
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
 
 inline void
-print_args(const std::string &source, const std::string &destination, const std::string &mode)
+print_args(std::string_view source, std::string_view destination, std::string_view mode)
 {
 	using std::cout, std::endl;
 	cout << " ------------- " << endl;
@@ -43,38 +44,50 @@ print_args(const std::string &source, const std::string &destination, const std:
 }
 
 inline void
-print_usage(std::string_view bin_name)
+print_usage(std::string_view prog_name)
 {
 	using std::cout, std::endl;
-	cout << "Usage: " << endl;
-#define X(str) cout << "       " << bin_name << " " << #str << endl;
-	X(source)
-	X(source destination)
-	X(-s source)
-	X(-s source - d destination)
-	X(-s source - d destination - m mode)
-#undef X
+	std::cout << "Usage:\n"
+	          << "  " << prog_name << " -s source\n"
+	          << "  " << prog_name << " -s source -d destination\n"
+	          << "  " << prog_name << " -s source -d destination -m mode\n\n";
 }
 
+struct OptionDescription {
+	std::string shortopt;
+	std::string longopt;
+	const char *argument;
+	std::string description;
+};
+
+template<std::size_t N>
 inline void
-print_options()
+print_options(const OptionDescription (&options)[N])
 {
 	using std::cout, std::endl;
-
 	cout << "Options: " << endl;
-#define X(str1, str2) cout << "  " << #str1 << ", " << #str2 << endl;
-	X(-s DIRECTORY, --source DIRECTORY Path to the source directory to organize)
-	X(-d DIRECTORY,
-	  --destination DIRECTORY Path to the destination directory to move the organized files to)
-	X(-m MODE, --mode MODE Determines which mode to run the organizer in)
-	X(-h, --help Prints this message)
-#undef X
+
+	for (const auto &opt : options) {
+		std::string left_col =
+		  opt.argument ? opt.shortopt + " " + opt.argument + ", " + opt.longopt + " " + opt.argument
+		               : opt.shortopt + ", " + opt.longopt;
+		std::cout << "  " << left_col << std::left << std::setw(std::max(2, 36 - (int)left_col.size()))
+		          << " " << opt.description << "\n";
+	}
+
+	std::cout << std::endl;
 }
 
 inline void
-print_help(std::string_view bin_name)
+print_help(std::string_view prog_name)
 {
 	using std::cout, std::endl;
-	print_usage(bin_name);
-	print_options();
+	const OptionDescription options[] = {
+		{ "-s", "--source", "DIRECTORY", "Source directory (default: current dir)" },
+		{ "-d", "--dest", "DIRECTORY", "Destination directory (default: source)" },
+		{ "-m", "--mode", "MODE", "Mode of organization: extension|header (default: extension)" },
+		{ "-h", "--help", nullptr, "Show this help message and exit" }
+	};
+	print_usage(prog_name);
+	print_options(options);
 }

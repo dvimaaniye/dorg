@@ -1,3 +1,4 @@
+#include <boost/algorithm/string/case_conv.hpp>
 #include <filesystem>
 #include <iostream>
 #include <libapp/organizer.hpp>
@@ -33,12 +34,6 @@ Organizer::organize_in_memory(Mode::Name mode)
 			this->category_wise_files = Category::categorize_by_extension(this->source);
 			break;
 	}
-
-	cout << "categories found: " << this->category_wise_files.size() << endl;
-
-	for (const auto &[category, files] : this->category_wise_files) {
-		cout << "category: " << category << ", files count: " << files.size() << endl;
-	}
 }
 
 void
@@ -68,32 +63,40 @@ Organizer::apply()
 
 		cout << "copying files now" << endl;
 		for (const auto &file_path : files) {
-			fs::path file_destination_path =
-			  destination_directory / file_path.filename();
+			fs::path file_destination_path = destination_directory / file_path.filename();
 			bool local_override = false;
-			if (fs::exists(file_destination_path) && !global_override &&
-			    !category_override) {
+			if (fs::exists(file_destination_path) && !global_override && !category_override) {
 				cout << "file " << file_destination_path << "exists" << endl;
 				cout << "Override it? [y/N(skip)/c(yes for this category)/a(yes "
-					"for all)] ";
-				char override_choice;
-				std::cin >> override_choice;
-				override_choice = std::tolower(override_choice);
-				if (override_choice == 'y') {
+				        "for all)] ";
+				std::string override_choice;
+				std::getline(std::cin, override_choice);
+				boost::to_lower(override_choice);
+				if (override_choice == "y") {
 					local_override = true;
-				} else if (override_choice == 'c') {
+				} else if (override_choice == "c") {
 					category_override = true;
-				} else if (override_choice == 'a') {
+				} else if (override_choice == "a") {
 					global_override = true;
 				} else {
 					continue;
 				}
 			}
 
-			auto copy_options =
-			  fs::copy_options::skip_symlinks | fs::copy_options::overwrite_existing;
+			auto copy_options = fs::copy_options::skip_symlinks | fs::copy_options::overwrite_existing;
 
 			fs::copy_file(file_path, file_destination_path, copy_options);
 		}
+	}
+}
+
+void
+Organizer::info()
+{
+	using std::cout, std::endl;
+	cout << "categories found: " << this->category_wise_files.size() << endl;
+
+	for (const auto &[category, files] : this->category_wise_files) {
+		cout << "category: " << category << ", files count: " << files.size() << endl;
 	}
 }

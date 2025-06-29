@@ -9,13 +9,13 @@
 
 namespace fs = std::filesystem;
 
-#define CATEGORY_LIST   \
-	X(unknown)      \
-	X(audio)        \
-	X(document)     \
-	X(photo)        \
-	X(presentation) \
-	X(video)        \
+#define CATEGORY_LIST \
+	X(unknown)          \
+	X(audio)            \
+	X(document)         \
+	X(photo)            \
+	X(presentation)     \
+	X(video)            \
 	X(zip)
 
 namespace Category

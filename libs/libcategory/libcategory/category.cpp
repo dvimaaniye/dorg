@@ -53,7 +53,7 @@ std::string
 to_string(const Category::Name &cat)
 {
 	switch (cat) {
-#define X(name)                    \
+#define X(name)              \
 	case Category::Name::name: \
 		return #name;
 		CATEGORY_LIST

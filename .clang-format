@@ -1,8 +1,9 @@
 BasedOnStyle: Mozilla
 Standard: c++17
 
-IndentWidth: 8
-UseTab: AlignWithSpaces
+UseTab: ForIndentation
+IndentWidth: 2
+TabWidth: 2
 
 ColumnLimit: 100
 

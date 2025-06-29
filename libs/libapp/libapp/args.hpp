@@ -6,12 +6,19 @@
 
 class Args
 {
-      public:
-	static void parse(int argc, char **argv);
-	static std::string get(char key, const std::string &fallback);
+public:
+	Args(int argc, char **argv)
+	{
+		this->args = parse(argc, argv);
+	}
 
-      private:
+	std::string get(char key) const;
+	std::string get(char key, const std::string &fallback) const;
+	void clear();
+
+private:
+	static std::unordered_map<char, std::string> parse(int argc, char **argv);
 	static const char *shortopts;
 	static const struct option longopts[];
-	inline static std::unordered_map<char, std::string> args;
+	std::unordered_map<char, std::string> args;
 };

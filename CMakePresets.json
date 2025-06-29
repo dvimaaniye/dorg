@@ -1,0 +1,96 @@
+{
+	"version": 6,
+	"cmakeMinimumRequired": {
+		"major": 4
+	},
+	"configurePresets": [
+		{
+			"name": "clang-ninja-with-tests",
+			"displayName": "Clang + Ninja (Tests Enabled)",
+			"generator": "Ninja",
+			"binaryDir": "build",
+			"cacheVariables": {
+				"CMAKE_CXX_COMPILER": "clang++",
+				"CMAKE_C_COMPILER": "clang",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+				"BUILD_TESTING": "ON"
+			}
+		},
+		{
+			"name": "clang-ninja-no-tests",
+			"displayName": "Clang + Ninja (Tests Disabled)",
+			"inherits": "clang-ninja-with-tests",
+			"cacheVariables": {
+				"BUILD_TESTING": "OFF"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "build-with-tests",
+			"configurePreset": "clang-ninja-with-tests"
+		},
+		{
+			"name": "build-no-tests",
+			"configurePreset": "clang-ninja-no-tests"
+		}
+	],
+	"testPresets": [
+		{
+			"name": "run-tests",
+			"configurePreset": "clang-ninja-with-tests",
+			"output": {
+				"outputOnFailure": true
+			},
+			"execution": {
+				"noTestsAction": "error",
+				"stopOnFailure": true
+			}
+		}
+	],
+	"workflowPresets": [
+		{
+			"name": "full-build",
+			"steps": [
+				{
+					"type": "configure",
+					"name": "clang-ninja-with-tests"
+				},
+				{
+					"type": "build",
+					"name": "build-with-tests"
+				}
+			]
+		},
+		{
+			"name": "full-build-no-test",
+			"steps": [
+				{
+					"type": "configure",
+					"name": "clang-ninja-no-tests"
+				},
+				{
+					"type": "build",
+					"name": "build-no-tests"
+				}
+			]
+		},
+		{
+			"name": "full-build-and-test",
+			"steps": [
+				{
+					"type": "configure",
+					"name": "clang-ninja-with-tests"
+				},
+				{
+					"type": "build",
+					"name": "build-with-tests"
+				},
+				{
+					"type": "test",
+					"name": "run-tests"
+				}
+			]
+		}
+	]
+}

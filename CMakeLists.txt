@@ -5,8 +5,13 @@ project(dirorg)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED False)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_COMPILER "clang++")
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(cmake/UpdateSubmodules.cmake)
+
+if(BUILD_TESTING)
+  include(CTest)
+  add_subdirectory(libs/libgtest)
+endif()
 
 add_subdirectory(libs/libcategory)
 add_subdirectory(libs/libapp)
