@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <libapp/args.hpp>
 #include <libapp/mode.hpp>
-#include <libapp/organizer.hpp>
+#include <liborganizer/organizer.hpp>
 
 int
 main(int argc, char **argv)

@@ -1,8 +1,8 @@
 #include <boost/algorithm/string/case_conv.hpp>
 #include <filesystem>
 #include <iostream>
-#include <libapp/organizer.hpp>
 #include <libcategory/category.hpp>
+#include <liborganizer/organizer.hpp>
 
 Organizer::Organizer(fs::path source, fs::path destination)
   : Organizer::Organizer(source, destination, Mode::Name::extension)
