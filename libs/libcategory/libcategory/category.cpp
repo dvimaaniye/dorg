@@ -8,20 +8,34 @@
 namespace Category
 {
 std::unordered_map<Category::Name, std::vector<fs::path>>
-categorize_by_extension(const fs::path &source_path)
+categorize_paths_by_extension(const std::vector<fs::path> &paths)
 {
+	using std::cout, std::endl;
 	std::unordered_map<Category::Name, std::vector<fs::path>> categorized;
 
-	for (auto const &entry : fs::directory_iterator{ source_path }) {
-		std::string ext = entry.path().extension();
+	for (const auto &path : paths) {
+		std::string ext = path.extension();
 		boost::trim_left_if(ext, boost::is_any_of("."));
-		Name category = Category::category_from_extension(ext);
+		Category::Name category = Category::category_from_extension(ext);
 		if (category == Category::Name::unknown) {
+			cout << "Unknown extension: " << ext << endl;
 			continue;
 		}
-		categorized[category].push_back(entry.path());
+		categorized[category].push_back(path);
 	}
 	return categorized;
+}
+
+std::unordered_map<Category::Name, std::vector<fs::path>>
+categorize_by_extension(const fs::path &source_path)
+{
+	std::vector<fs::path> paths;
+
+	for (const auto &entry : fs::directory_iterator{ source_path }) {
+		paths.push_back(entry.path());
+	}
+
+	return categorize_paths_by_extension(paths);
 }
 
 std::unordered_map<Category::Name, std::vector<fs::path>>

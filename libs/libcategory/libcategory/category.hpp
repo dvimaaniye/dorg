@@ -26,20 +26,23 @@ enum class Name {
 #undef X
 };
 
-std::unordered_map<Name, std::vector<fs::path>>
+std::unordered_map<Category::Name, std::vector<fs::path>>
+categorize_paths_by_extension(const std::vector<fs::path> &paths);
+
+std::unordered_map<Category::Name, std::vector<fs::path>>
 categorize_by_extension(const fs::path &source_path);
 
-std::unordered_map<Name, std::vector<fs::path>>
+std::unordered_map<Category::Name, std::vector<fs::path>>
 categorize_by_header(const fs::path &source_path);
 
-Name
+Category::Name
 category_from_extension(std::string ext);
 
 std::optional<std::string>
-directory_name_from_category(Name cat);
+directory_name_from_category(Category::Name cat);
 
 std::string
-to_string(const Name &cat);
+to_string(const Category::Name &cat);
 
 } // namespace Category
 

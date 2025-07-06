@@ -23,3 +23,5 @@ private:
 	fs::path destination;
 	Mode::Name mode;
 };
+
+enum class OverrideOptions { NOT_SET, SKIP, OVERWRITE };
