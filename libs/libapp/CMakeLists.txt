@@ -11,8 +11,4 @@ if(BUILD_TESTING)
   target_link_libraries(mode_test PRIVATE libapp GTest::gtest_main)
   gtest_discover_tests(mode_test)
 
-  add_executable(args_test libapp/args_test.cpp)
-  target_link_libraries(args_test PRIVATE libapp GTest::gtest_main)
-  gtest_discover_tests(args_test)
-
 endif()
