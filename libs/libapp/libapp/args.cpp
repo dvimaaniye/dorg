@@ -8,6 +8,11 @@ const struct option Args::longopts[] = { { "source", required_argument, nullptr,
 	                                       { "help", no_argument, nullptr, 'h' },
 	                                       { nullptr, 0, nullptr, 0 } };
 
+Args::Args(int argc, char **argv)
+{
+	this->args = parse(argc, argv);
+}
+
 std::unordered_map<char, std::string>
 Args::parse(int argc, char **argv)
 {

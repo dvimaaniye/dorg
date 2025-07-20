@@ -7,11 +7,7 @@
 class Args
 {
 public:
-	Args(int argc, char **argv)
-	{
-		this->args = parse(argc, argv);
-	}
-
+	Args(int argc, char **argv);
 	std::string get(char key) const;
 	std::string get(char key, const std::string &fallback) const;
 	void clear();
