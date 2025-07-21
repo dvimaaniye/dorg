@@ -1,10 +1,9 @@
-#include <libapp/args.hpp>
+#include <libutility/args.hpp>
 
-const char *Args::shortopts = "s:d:m:h";
+const char *Args::shortopts = "s:d:h";
 
 const struct option Args::longopts[] = { { "source", required_argument, nullptr, 's' },
 	                                       { "destination", required_argument, nullptr, 'd' },
-	                                       { "mode", required_argument, nullptr, 'm' },
 	                                       { "help", no_argument, nullptr, 'h' },
 	                                       { nullptr, 0, nullptr, 0 } };
 
@@ -22,7 +21,6 @@ Args::parse(int argc, char **argv)
 		switch (opt) {
 			case 's':
 			case 'd':
-			case 'm':
 				args[opt] = optarg;
 				break;
 			case 'h':

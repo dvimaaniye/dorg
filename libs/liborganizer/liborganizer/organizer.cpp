@@ -1,39 +1,19 @@
 #include <boost/algorithm/string/case_conv.hpp>
 #include <filesystem>
 #include <iostream>
-#include <libcategory/category.hpp>
 #include <liborganizer/organizer.hpp>
+#include <libutility/category.hpp>
 
 Organizer::Organizer(fs::path source, fs::path destination)
-  : Organizer::Organizer(source, destination, Mode::Name::extension)
-{
-}
-
-Organizer::Organizer(fs::path source, fs::path destination, Mode::Name mode)
 {
 	this->source = source;
 	this->destination = destination;
-	this->mode = mode;
 }
 
 void
 Organizer::organize_in_memory()
 {
-	this->organize_in_memory(this->mode);
-}
-
-void
-Organizer::organize_in_memory(Mode::Name mode)
-{
-	using std::cout, std::endl;
-	switch (mode) {
-		case Mode::Name::header:
-			this->category_wise_files = Category::categorize_by_header(this->source);
-			break;
-		default:
-			this->category_wise_files = Category::categorize_by_extension(this->source);
-			break;
-	}
+	this->category_wise_files = Category::categorize_by_extension(this->source);
 }
 
 void

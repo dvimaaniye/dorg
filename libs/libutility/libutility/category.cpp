@@ -2,18 +2,18 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <iostream>
-#include <libcategory/category.hpp>
-#include <libcategory/mappings.hpp>
+#include <libutility/category.hpp>
+#include <libutility/mappings.hpp>
 
 namespace Category
 {
 std::unordered_map<Category::Name, std::vector<fs::path>>
-categorize_paths_by_extension(const std::vector<fs::path> &paths)
+categorize_by_extension(const std::vector<fs::path> &file_paths)
 {
 	using std::cout, std::endl;
 	std::unordered_map<Category::Name, std::vector<fs::path>> categorized;
 
-	for (const auto &path : paths) {
+	for (const auto &path : file_paths) {
 		std::string ext = path.extension();
 		boost::trim_left_if(ext, boost::is_any_of("."));
 		Category::Name category = Category::category_from_extension(ext);
@@ -35,14 +35,7 @@ categorize_by_extension(const fs::path &source_path)
 		paths.push_back(entry.path());
 	}
 
-	return categorize_paths_by_extension(paths);
-}
-
-std::unordered_map<Category::Name, std::vector<fs::path>>
-categorize_by_header(const fs::path &source_path)
-{
-	std::cout << "categoring by header" << std::endl;
-	return Category::categorize_by_extension(source_path);
+	return categorize_by_extension(paths);
 }
 
 Category::Name

@@ -23,8 +23,7 @@ if(BUILD_TESTING)
   add_subdirectory(libs/libgtest)
 endif()
 
-add_subdirectory(libs/libapp)
-add_subdirectory(libs/libcategory)
+add_subdirectory(libs/libutility)
 add_subdirectory(libs/liborganizer)
 
 add_subdirectory(app)

@@ -1,8 +1,7 @@
 #include <app/utility.hpp>
 #include <cstdlib>
-#include <libapp/args.hpp>
-#include <libapp/mode.hpp>
 #include <liborganizer/organizer.hpp>
+#include <libutility/args.hpp>
 
 int
 main(int argc, char **argv)
@@ -16,15 +15,13 @@ main(int argc, char **argv)
 		return EXIT_SUCCESS;
 	}
 
-	auto maybe_mode = Mode::from_string(args.get('m', "extension"));
-	if (!maybe_mode) {
-		cerr << "Invalid mode: " << args.get('m') << endl;
+	fs::path current_path = fs::current_path();
+	fs::path source_path = args.get('s');
+	if (source_path.empty()) {
+		cout << "Source path is needed" << endl;
+		print_help(argv[0]);
 		return EXIT_FAILURE;
 	}
-	Mode::Name mode = *maybe_mode;
-
-	fs::path current_path = fs::current_path();
-	fs::path source_path = args.get('s', current_path.string());
 	if (handle_directory_existence(source_path) == EXIT_FAILURE) {
 		return EXIT_FAILURE;
 	}
@@ -33,9 +30,9 @@ main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
-	print_args(source_path.string(), destination_path.string(), Mode::to_string(mode));
+	print_args(source_path.string(), destination_path.string());
 
-	auto organizer = Organizer(source_path, destination_path, mode);
+	auto organizer = Organizer(source_path, destination_path);
 	organizer.organize_in_memory();
 	organizer.info();
 	organizer.apply();

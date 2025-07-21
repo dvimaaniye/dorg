@@ -1,11 +1,8 @@
 #include <gtest/gtest.h>
-#include <libcategory/category.hpp>
+#include <libutility/category.hpp>
 
 // std::unordered_map<Category::Name, std::vector<fs::path>>
 // categorize_by_extension(const fs::path &source_path);
-//
-// std::unordered_map<Category::Name, std::vector<fs::path>>
-// categorize_by_header(const fs::path &source_path);
 
 TEST(CategoryTest, CategorizeByExtension) {}
 

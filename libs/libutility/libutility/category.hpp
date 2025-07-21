@@ -27,13 +27,10 @@ enum class Name {
 };
 
 std::unordered_map<Category::Name, std::vector<fs::path>>
-categorize_paths_by_extension(const std::vector<fs::path> &paths);
+categorize_by_extension(const std::vector<fs::path> &file_paths);
 
 std::unordered_map<Category::Name, std::vector<fs::path>>
 categorize_by_extension(const fs::path &source_path);
-
-std::unordered_map<Category::Name, std::vector<fs::path>>
-categorize_by_header(const fs::path &source_path);
 
 Category::Name
 category_from_extension(std::string ext);

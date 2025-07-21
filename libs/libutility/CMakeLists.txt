@@ -1,5 +1,6 @@
-set(LIBRARY_NAME "libcategory")
-add_library(${LIBRARY_NAME} ${LIBRARY_NAME}/category.cpp)
+set(LIBRARY_NAME "libutility")
+
+add_library(${LIBRARY_NAME} ${LIBRARY_NAME}/category.cpp ${LIBRARY_NAME}/args.cpp)
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

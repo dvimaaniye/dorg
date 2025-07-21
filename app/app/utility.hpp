@@ -33,13 +33,12 @@ handle_directory_existence(const fs::path &directory_path)
 }
 
 inline void
-print_args(std::string_view source, std::string_view destination, std::string_view mode)
+print_args(std::string_view source, std::string_view destination)
 {
 	using std::cout, std::endl;
 	cout << " ------------- " << endl;
 	cout << "      [source] " << source << endl;
 	cout << " [destination] " << destination << endl;
-	cout << "        [mode] " << mode << endl;
 	cout << " ------------- " << endl;
 }
 
@@ -49,8 +48,7 @@ print_usage(std::string_view prog_name)
 	using std::cout, std::endl;
 	std::cout << "Usage:\n"
 	          << "  " << prog_name << " -s source\n"
-	          << "  " << prog_name << " -s source -d destination\n"
-	          << "  " << prog_name << " -s source -d destination -m mode\n\n";
+	          << "  " << prog_name << " -s source -d destination\n";
 }
 
 struct OptionDescription {
@@ -83,9 +81,8 @@ print_help(std::string_view prog_name)
 {
 	using std::cout, std::endl;
 	const OptionDescription options[] = {
-		{ "-s", "--source", "DIRECTORY", "Source directory (default: current dir)" },
+		{ "-s", "--source", "DIRECTORY", "Source directory (required)" },
 		{ "-d", "--dest", "DIRECTORY", "Destination directory (default: source)" },
-		{ "-m", "--mode", "MODE", "Mode of organization: extension|header (default: extension)" },
 		{ "-h", "--help", nullptr, "Show this help message and exit" }
 	};
 	print_usage(prog_name);
