@@ -1,0 +1,15 @@
+categories:
+  - name: cg
+    dir: cg
+    extensions:
+      - blender
+      - 3ds
+      - fbx
+
+  - name: shell-scripts
+    extensions:
+      - sh
+
+  - name: no-extension
+    extensions:
+      - ""

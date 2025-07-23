@@ -20,8 +20,10 @@ include(cmake/UpdateSubmodules.cmake)
 
 if(BUILD_TESTING)
   include(CTest)
-  add_subdirectory(libs/libgtest)
+  add_subdirectory(external/gtest EXCLUDE_FROM_ALL)
 endif()
+
+add_subdirectory(external/ryml)
 
 add_subdirectory(libs/libutility)
 add_subdirectory(libs/liborganizer)

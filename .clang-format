@@ -1,6 +1,8 @@
 BasedOnStyle: Mozilla
 Standard: c++17
 
+Cpp11BracedListStyle: true
+
 UseTab: ForIndentation
 IndentWidth: 2
 TabWidth: 2
@@ -17,11 +19,17 @@ IncludeBlocks: Regroup
 
 SeparateDefinitionBlocks: Always
 
-AllowShortFunctionsOnASingleLine: Empty
-
 AlignEscapedNewlines: LeftWithLastLine
+AlignAfterOpenBracket: BlockIndent
+
+AllowShortBlocksOnASingleLine: Never
 
 BinPackArguments: false
 BinPackParameters: OnePerLine
 
+PackConstructorInitializers: CurrentLine
+BreakConstructorInitializers: AfterColon
+
 PointerAlignment: Right
+
+PenaltyBreakAssignment: 100

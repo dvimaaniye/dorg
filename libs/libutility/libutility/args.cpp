@@ -2,10 +2,12 @@
 
 const char *Args::shortopts = "s:d:h";
 
-const struct option Args::longopts[] = { { "source", required_argument, nullptr, 's' },
-	                                       { "destination", required_argument, nullptr, 'd' },
-	                                       { "help", no_argument, nullptr, 'h' },
-	                                       { nullptr, 0, nullptr, 0 } };
+const struct option Args::longopts[] = {
+  {"source", required_argument, nullptr, 's'},
+  {"destination", required_argument, nullptr, 'd'},
+  {"help", no_argument, nullptr, 'h'},
+  {nullptr, 0, nullptr, 0}
+};
 
 Args::Args(int argc, char **argv)
 {
