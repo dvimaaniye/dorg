@@ -17,14 +17,12 @@ void
 Config::extend_config(const Config &other_config)
 {
 	for (const auto &[category_name, config_rule] : other_config.rules) {
-		if ((this->rules.find(category_name) == this->rules.end()) || (config_rule.override)) {
-			this->rules[category_name] = config_rule;
-		} else {
-			// override is false and rule already exists, extend the extensions
+		auto extensions = this->rules[category_name].extensions;
+		this->rules[category_name] = config_rule;
+
+		if (!config_rule.override) {
 			this->rules[category_name].extensions.insert(
-			  this->rules[category_name].extensions.end(),
-			  config_rule.extensions.begin(),
-			  config_rule.extensions.end()
+			  this->rules[category_name].extensions.end(), extensions.begin(), extensions.end()
 			);
 		}
 	}
@@ -62,7 +60,9 @@ Config::parse_config(const std::string &config_path)
 			category_node["override"] >> rule.override;
 		}
 
-		category_node["extensions"] >> rule.extensions;
+		if (category_node.has_child("extensions")) {
+			category_node["extensions"] >> rule.extensions;
+		}
 
 		rules[rule.name] = rule;
 	}

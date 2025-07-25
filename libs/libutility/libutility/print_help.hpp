@@ -1,16 +1,31 @@
 #pragma once
 
+#include <algorithm>
 #include <boost/algorithm/string/case_conv.hpp>
+#include <iomanip>
 #include <iostream>
+#include <libutility/args.hpp>
+#include <libutility/options.hpp>
 
 inline void
-print_args(std::string_view source, std::string_view destination)
+print_args(std::unordered_map<std::string, std::string> args)
 {
 	using std::cout, std::endl;
-	cout << " ------------- " << endl;
-	cout << "      [source] " << source << endl;
-	cout << " [destination] " << destination << endl;
-	cout << " ------------- " << endl;
+
+	int max_width = 10;
+
+	for (const auto &arg : args) {
+		max_width = std::max((int)arg.first.size(), max_width);
+	}
+
+	cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
+
+	for (const auto &[key, val] : args) {
+		cout << " " << std::right << std::setw(max_width) << std::setfill(' ') << key << ":";
+		cout << " " << val << " \n";
+	}
+
+	cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
 }
 
 inline void
@@ -18,30 +33,35 @@ print_usage(std::string_view prog_name)
 {
 	using std::cout, std::endl;
 	std::cout << "Usage:\n"
-	          << "  " << prog_name << " -s source\n"
-	          << "  " << prog_name << " -s source -d destination\n";
+	          << "  " << prog_name << " -s <path>\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-d | --dest <path>]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-i | --insensitive-case]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-o | --override]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-k | --skip]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-h | --help]\n"
+
+	          << "\nTo get default config:\n"
+	          << "  " << prog_name << " get-config\n"
+
+	          << "\nNote: Symlinks and directories are never moved\n";
 }
 
-struct OptionDescription {
-	std::string shortopt;
-	std::string longopt;
-	const char *argument;
-	std::string description;
-};
-
-template<std::size_t N>
 inline void
-print_options(const OptionDescription (&options)[N])
+print_options(const std::vector<OptionDescription> &opt_descriptions)
 {
 	using std::cout, std::endl;
 	cout << "Options: " << endl;
 
-	for (const auto &opt : options) {
-		std::string left_col = opt.argument ? opt.shortopt + " " + opt.argument + ", " + opt.longopt +
-		                                        " " + opt.argument
-		                                    : opt.shortopt + ", " + opt.longopt;
+	for (const auto &opt_description : opt_descriptions) {
+		std::string left_col = opt_description.option.has_arg
+		                         ? "-" + std::string(opt_description.option.short_name) + " " +
+		                             opt_description.argument + ", " + "--" +
+		                             opt_description.option.long_name + " " + opt_description.argument
+		                         : "-" + std::string(opt_description.option.short_name) + ", " + "--" +
+		                             opt_description.option.long_name;
+
 		std::cout << "  " << left_col << std::left << std::setw(std::max(2, 36 - (int)left_col.size()))
-		          << " " << opt.description << "\n";
+		          << " " << opt_description.description << "\n";
 	}
 
 	std::cout << std::endl;
@@ -51,11 +71,6 @@ inline void
 print_help(std::string_view prog_name)
 {
 	using std::cout, std::endl;
-	const OptionDescription options[] = {
-	  {"-s", "--source", "DIRECTORY", "Source directory (required)"},
-	  {"-d", "--dest", "DIRECTORY", "Destination directory (default: source)"},
-	  {"-h", "--help", nullptr, "Show this help message and exit"}
-	};
 	print_usage(prog_name);
-	print_options(options);
+	print_options(option_descriptions);
 }

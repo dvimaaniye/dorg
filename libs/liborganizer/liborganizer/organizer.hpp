@@ -18,8 +18,8 @@ public:
 	  fs::path destination,
 	  std::shared_ptr<const std::unordered_map<std::string, std::string_view>> extension_to_directory
 	);
-	void organize_in_memory();
-	void apply();
+	void organize_in_memory(bool insensitive_case = false);
+	void apply(OverrideOptions _global_override = OverrideOptions::NOT_SET);
 	void info() const;
 	void show_layout() const;
 

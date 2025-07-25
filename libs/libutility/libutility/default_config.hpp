@@ -1,15 +1,32 @@
-# This is the default config. It is not ideal to make changes to this.
+constexpr const char *default_config = R"(# This is the default config.
 # Make a user.yml in the same directory to add or modify categories.
 #
 # Example user.yml:
 # categories:
 #   - name: 3d
 #     dir: 3d # (optional, default: name)
-#     override: true # (optional, default: false. When true, it overrides an existing category, extends otherwise)
+#     override: true # (optional, default: false. When true, it overrides the extensions of the category, extends otherwise)
 #     extensions:
 #       - blender
 #       - fbx
 #       - obj
+#
+#   - name: jpg
+#     dir: photo/jpg
+#     extensions:
+#       - jpg
+#       - jpeg
+#
+# NOTE: The override option is only for overriding extensions, everything else (like dir) is overrided automatically. 
+#       Omit a property to not override it.
+#
+# In any way if you loose this default.yml, you can generate it by:
+#
+#             `dorg get-config`
+#
+#              OR save it as a file:
+#
+#             `dorg get-config > ~/.config/dorg/default.yml`
 
 categories:
   - name: audio
@@ -106,3 +123,4 @@ categories:
       - wmv
       - m4v
       - 3gp
+)";

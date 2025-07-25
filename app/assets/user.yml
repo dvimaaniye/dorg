@@ -13,3 +13,13 @@ categories:
   - name: no-extension
     extensions:
       - ""
+
+  - name: jpg
+    dir: photo/jpg
+    extensions:
+      - jpg
+      - jpeg
+
+  - name: pdf
+    extensions: 
+      - pdf

@@ -20,15 +20,20 @@ Organizer::Organizer(
 }
 
 void
-Organizer::organize_in_memory()
+Organizer::organize_in_memory(bool insensitive_case)
 {
 	for (const auto &file_path : fs::directory_iterator{this->source}) {
 		if (file_path.is_directory() || file_path.is_symlink()) {
 			continue;
 		}
+
 		std::string extension = file_path.path().extension();
 		boost::trim_left_if(extension, boost::is_any_of("."));
-		std::cout << "extension: " << extension << std::endl;
+
+		if (insensitive_case) {
+			boost::to_lower(extension);
+		}
+
 		if (this->extension_to_directory->find(extension) != this->extension_to_directory->end()) {
 			this->directory_wise_files[this->extension_to_directory->at(extension)].push_back(
 			  file_path.path()
@@ -38,7 +43,7 @@ Organizer::organize_in_memory()
 }
 
 void
-Organizer::apply()
+Organizer::apply(OverrideOptions _global_override)
 {
 	using std::cout, std::cerr, std::endl;
 
@@ -47,7 +52,7 @@ Organizer::apply()
 		return;
 	}
 
-	OverrideOptions global_override = OverrideOptions::NOT_SET;
+	OverrideOptions global_override = _global_override;
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
 		fs::path directory_path = this->destination / directory_name;

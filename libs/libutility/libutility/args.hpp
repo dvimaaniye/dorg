@@ -1,20 +1,25 @@
 #pragma once
 
 #include <getopt.h>
+#include <libutility/options.hpp>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class Args
 {
 public:
-	Args(int argc, char **argv);
-	std::string get(char key) const;
-	std::string get(char key, const std::string &fallback) const;
+	Args(std::vector<Option> options);
+	bool has(const std::string &key) const;
+	std::string get(const std::string &key, const std::string &fallback = "") const;
 	void clear();
+	void parse(int argc, char **argv);
+	std::unordered_map<std::string, std::string> dump() const;
 
 private:
-	static std::unordered_map<char, std::string> parse(int argc, char **argv);
-	static const char *shortopts;
-	static const struct option longopts[];
-	std::unordered_map<char, std::string> args;
+	std::unordered_map<std::string, std::string> args;
+	const std::vector<Option> options;
+	std::unordered_map<char, int> short_to_longindex;
+	std::string shortopts;
+	std::vector<struct option> longopts;
 };
