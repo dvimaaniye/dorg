@@ -14,7 +14,7 @@ Organizer::Organizer(
   std::shared_ptr<const std::unordered_map<std::string, std::string_view>> extension_to_directory
 ) :
   source(source),
-  destination(source),
+  destination(destination),
   extension_to_directory(extension_to_directory)
 {
 }

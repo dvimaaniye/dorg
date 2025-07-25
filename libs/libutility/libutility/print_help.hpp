@@ -39,6 +39,7 @@ print_usage(std::string_view prog_name)
 	          << "  " << std::setw(prog_name.size()) << "" << " [-o | --override]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-k | --skip]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-h | --help]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [--dry-run]\n"
 
 	          << "\nTo get default config:\n"
 	          << "  " << prog_name << " get-config\n"
@@ -53,12 +54,19 @@ print_options(const std::vector<OptionDescription> &opt_descriptions)
 	cout << "Options: " << endl;
 
 	for (const auto &opt_description : opt_descriptions) {
-		std::string left_col = opt_description.option.has_arg
-		                         ? "-" + std::string(opt_description.option.short_name) + " " +
-		                             opt_description.argument + ", " + "--" +
-		                             opt_description.option.long_name + " " + opt_description.argument
-		                         : "-" + std::string(opt_description.option.short_name) + ", " + "--" +
-		                             opt_description.option.long_name;
+		std::string short_name =
+		  (opt_description.option.short_name
+		     ? "-" + std::string(opt_description.option.short_name) +
+		         (opt_description.option.has_arg ? " " + opt_description.argument : "")
+		     : "");
+		std::string long_name =
+		  (opt_description.option.long_name
+		     ? "--" + std::string(opt_description.option.long_name) +
+		         (opt_description.option.has_arg ? " " + opt_description.argument : "")
+		     : "");
+		std::string left_col = short_name.empty()  ? long_name
+		                       : long_name.empty() ? short_name
+		                                           : short_name + ", " + long_name;
 
 		std::cout << "  " << left_col << std::left << std::setw(std::max(2, 36 - (int)left_col.size()))
 		          << " " << opt_description.description << "\n";

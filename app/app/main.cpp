@@ -36,12 +36,20 @@ main(int argc, char **argv)
 	}
 
 	if (!fs::exists(source_path)) {
+		cerr << source_path << " does not exist." << endl;
 		return EXIT_FAILURE;
 	}
 
 	fs::path destination_path = args.has("dest") ? args.get("dest") : source_path.string();
-	if (handle_directory_existence(destination_path) == EXIT_FAILURE) {
-		return EXIT_FAILURE;
+	if (args.has("dry-run")) {
+		if (!fs::exists(destination_path)) {
+			cout << destination_path << " does not exist." << "\n";
+			cout << "Creating " << destination_path << endl;
+		}
+	} else {
+		if (handle_directory_existence(destination_path) == EXIT_FAILURE) {
+			return EXIT_FAILURE;
+		}
 	}
 
 	const std::string config_home = get_config_home();
@@ -103,7 +111,9 @@ main(int argc, char **argv)
 	organizer.organize_in_memory(insensitive_case);
 	organizer.info();
 	organizer.show_layout();
-	organizer.apply(override_option);
+	if (!args.has("dry-run")) {
+		organizer.apply(override_option);
+	}
 
 	return EXIT_SUCCESS;
 }

@@ -27,7 +27,7 @@ handle_directory_existence(const std::string &directory_path, const bool ask_bef
 
 		if (user_wants_dir == "y") {
 			cout << "Creating directory " << directory_path << endl;
-			fs::create_directory(directory_path);
+			fs::create_directories(directory_path);
 		} else {
 			return EXIT_FAILURE;
 		}
