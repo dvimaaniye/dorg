@@ -4,6 +4,6 @@ root=true
 indent_style=tab
 indent_size=2
 
-[*.{json}]
+[*.json]
 indent_style=tab
 indent_size=2

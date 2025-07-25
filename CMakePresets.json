@@ -6,94 +6,131 @@
 	},
 	"configurePresets": [
 		{
-			"name": "clang-ninja-with-tests",
-			"displayName": "Clang + Ninja (Tests Enabled)",
-			"generator": "Ninja",
+			"name": "base-clang",
+			"hidden": true,
 			"binaryDir": "build",
 			"cacheVariables": {
-				"CMAKE_CXX_COMPILER": "clang++",
 				"CMAKE_C_COMPILER": "clang",
-				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+				"CMAKE_CXX_COMPILER": "clang++",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+			}
+		},
+		{
+			"name": "with-tests",
+			"hidden": true,
+			"inherits": "base-clang",
+			"cacheVariables": {
 				"BUILD_TESTING": "ON"
 			}
 		},
 		{
-			"name": "clang-ninja-no-tests",
-			"displayName": "Clang + Ninja (Tests Disabled)",
-			"inherits": "clang-ninja-with-tests",
+			"name": "no-tests",
+			"hidden": true,
+			"inherits": "base-clang",
 			"cacheVariables": {
 				"BUILD_TESTING": "OFF"
 			}
+		},
+		{
+			"name": "make-clang-with-tests",
+			"inherits": "with-tests",
+			"generator": "Unix Makefiles",
+			"displayName": "Clang + Make (Tests Enabled)"
+		},
+		{
+			"name": "make-clang-no-tests",
+			"inherits": "no-tests",
+			"generator": "Unix Makefiles",
+			"displayName": "Clang + Make (Tests Disabled)"
+		},
+		{
+			"name": "ninja-clang-with-tests",
+			"inherits": "with-tests",
+			"generator": "Ninja",
+			"displayName": "Clang + Ninja (Tests Enabled)"
+		},
+		{
+			"name": "ninja-clang-no-tests",
+			"inherits": "no-tests",
+			"generator": "Ninja",
+			"displayName": "Clang + Ninja (Tests Disabled)"
 		}
 	],
 	"buildPresets": [
 		{
-			"name": "build-with-tests",
-			"configurePreset": "clang-ninja-with-tests"
+			"name": "make-build-with-tests",
+			"configurePreset": "make-clang-with-tests"
+		},
+		{ "name": "make-build-no-tests", "configurePreset": "make-clang-no-tests" },
+		{
+			"name": "ninja-build-with-tests",
+			"configurePreset": "ninja-clang-with-tests"
 		},
 		{
-			"name": "build-no-tests",
-			"configurePreset": "clang-ninja-no-tests"
+			"name": "ninja-build-no-tests",
+			"configurePreset": "ninja-clang-no-tests"
 		}
 	],
 	"testPresets": [
 		{
-			"name": "run-tests",
-			"configurePreset": "clang-ninja-with-tests",
-			"output": {
-				"outputOnFailure": true
-			},
+			"name": "make-run-tests",
+			"configurePreset": "make-clang-with-tests",
+			"output": { "outputOnFailure": true },
 			"execution": {
 				"noTestsAction": "error",
 				"stopOnFailure": false
 			},
-			"environment": {
-				"GTEST_COLOR": "1"
-			}
+			"environment": { "GTEST_COLOR": "1" }
+		},
+		{
+			"name": "ninja-run-tests",
+			"inherits": "make-run-tests",
+			"configurePreset": "ninja-clang-with-tests"
 		}
 	],
 	"workflowPresets": [
 		{
-			"name": "full-build",
+			"name": "make-full-build",
 			"steps": [
-				{
-					"type": "configure",
-					"name": "clang-ninja-with-tests"
-				},
-				{
-					"type": "build",
-					"name": "build-with-tests"
-				}
+				{ "type": "configure", "name": "make-clang-no-tests" },
+				{ "type": "build", "name": "make-build-no-tests" }
 			]
 		},
 		{
-			"name": "full-build-no-test",
+			"name": "make-full-build-with-test",
 			"steps": [
-				{
-					"type": "configure",
-					"name": "clang-ninja-no-tests"
-				},
-				{
-					"type": "build",
-					"name": "build-no-tests"
-				}
+				{ "type": "configure", "name": "make-clang-with-tests" },
+				{ "type": "build", "name": "make-build-with-tests" }
 			]
 		},
 		{
-			"name": "full-build-and-test",
+			"name": "make-full-build-and-test",
 			"steps": [
-				{
-					"type": "configure",
-					"name": "clang-ninja-with-tests"
-				},
-				{
-					"type": "build",
-					"name": "build-with-tests"
-				},
-				{
-					"type": "test",
-					"name": "run-tests"
-				}
+				{ "type": "configure", "name": "make-clang-with-tests" },
+				{ "type": "build", "name": "make-build-with-tests" },
+				{ "type": "test", "name": "make-run-tests" }
+			]
+		},
+		{
+			"name": "ninja-full-build",
+			"steps": [
+				{ "type": "configure", "name": "ninja-clang-no-tests" },
+				{ "type": "build", "name": "ninja-build-no-tests" }
+			]
+		},
+		{
+			"name": "ninja-full-build-with-test",
+			"steps": [
+				{ "type": "configure", "name": "ninja-clang-with-tests" },
+				{ "type": "build", "name": "ninja-build-with-tests" }
+			]
+		},
+		{
+			"name": "ninja-full-build-and-test",
+			"steps": [
+				{ "type": "configure", "name": "ninja-clang-with-tests" },
+				{ "type": "build", "name": "ninja-build-with-tests" },
+				{ "type": "test", "name": "ninja-run-tests" }
 			]
 		}
 	]
