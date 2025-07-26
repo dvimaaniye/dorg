@@ -49,10 +49,8 @@ Organizer::organize_in_memory(bool insensitive_case)
 void
 Organizer::apply(OverrideOptions _global_override)
 {
-	using std::cout, std::cerr, std::endl;
-
 	if (this->directory_wise_files.empty()) {
-		cout << "Nothing to do" << endl;
+		std::cout << "Nothing to do\n";
 		return;
 	}
 
@@ -85,8 +83,6 @@ Organizer::apply(OverrideOptions _global_override)
 OverrideOptions
 Organizer::decide_override(fs::path file_path, OverrideOptions &directory, OverrideOptions &global)
 {
-	using std::cout, std::endl;
-
 	if (global != OverrideOptions::NOT_SET) {
 		return global;
 	}
@@ -96,7 +92,7 @@ Organizer::decide_override(fs::path file_path, OverrideOptions &directory, Overr
 	}
 
 	// clang-format off
-	cout << "file " << file_path << " exists. Override it? \n"
+	std::cout << "file " << file_path << " exists. Override it? \n"
 	        "[ y(yes for this file)/ c(yes for this directory)/ a(yes for all)/ "
 	        "n(skip this file)/ k(skip for directory)/ x(skip for all) ] \n"
 	        "(default: n) ";
@@ -130,32 +126,29 @@ Organizer::decide_override(fs::path file_path, OverrideOptions &directory, Overr
 void
 Organizer::info() const
 {
-	using std::cout, std::endl;
-	cout << "files divided into " << this->directory_wise_files.size() << " directories" << "\n";
+	std::cout << "files divided into " << this->directory_wise_files.size() << " directories" << "\n";
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		cout << "directory: " << directory_name << ", files count: " << files.size() << "\n";
+		std::cout << "directory: " << directory_name << ", files count: " << files.size() << "\n";
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
 
 void
 Organizer::show_layout() const
 {
-	using std::cout, std::endl;
-
 	if (this->directory_wise_files.empty()) {
-		cout << "No layout has been made for " << this->destination << endl;
+		std::cout << "No layout has been made for " << this->destination << "\n";
 		return;
 	}
-	cout << this->destination << " organized layout: \n";
+	std::cout << this->destination << " organized layout: \n";
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		cout << "  " << directory_name << ": \n";
+		std::cout << "  " << directory_name << ": \n";
 		for (const auto &file : files) {
-			cout << "    - " << file << "\n";
+			std::cout << "    - " << file << "\n";
 		}
 	}
 
-	cout << endl;
+	std::cout << std::endl;
 }

@@ -7,7 +7,6 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -31,12 +30,12 @@ Config::extend_config(const Config &other_config)
 	}
 }
 
-std::unordered_map<std::string, ConfigRule>
+std::unordered_map<std::string, CategoryRule>
 Config::parse_config(const std::string &config_path)
 {
-	std::unordered_map<std::string, ConfigRule> rules{};
+	std::unordered_map<std::string, CategoryRule> rules{};
 	if (!fs::exists(config_path)) {
-		std::cout << "config: " << config_path << " does not exist." << std::endl;
+		std::cout << "config: " << config_path << " does not exist.\n";
 		return rules;
 	}
 
@@ -50,7 +49,7 @@ Config::parse_config(const std::string &config_path)
 	ryml::ConstNodeRef categories_node = root["categories"];
 
 	for (ryml::ConstNodeRef category_node : categories_node.children()) {
-		ConfigRule rule;
+		CategoryRule rule;
 		category_node["name"] >> rule.name;
 
 		if (category_node.has_child("dir")) {

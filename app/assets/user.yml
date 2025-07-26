@@ -14,12 +14,20 @@ categories:
     extensions:
       - ""
 
-  - name: jpg
-    dir: photo/jpg
-    extensions:
-      - jpg
-      - jpeg
+  # - name: jpg
+  #   dir: photo/jpg
+  #   extensions:
+  #     - jpg
+  #     - jpeg
+  #     - JPG
 
   - name: pdf
     extensions: 
       - pdf
+
+  - name: font
+    extensions:
+      - ttf
+      - otf
+      - woff
+      - woff2

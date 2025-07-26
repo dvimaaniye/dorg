@@ -15,9 +15,7 @@ namespace fs = std::filesystem;
 int
 main(int argc, char **argv)
 {
-	using std::cout, std::cerr, std::endl;
-
-	if (std::string(argv[1]) == "get-config") {
+	if (argc == 2 && std::string(argv[1]) == "get-config") {
 		print_default_config();
 		return EXIT_SUCCESS;
 	}
@@ -33,21 +31,21 @@ main(int argc, char **argv)
 	fs::path current_path = fs::current_path();
 	fs::path source_path = args.get("source");
 	if (source_path.empty()) {
-		cerr << "Source path is needed" << endl;
-		print_help(argv[0]);
+		std::cerr << "Missing source path.\n";
+		print_usage(argv[0]);
 		return EXIT_FAILURE;
 	}
 
 	if (!fs::exists(source_path)) {
-		cerr << source_path << " does not exist." << endl;
+		std::cerr << source_path << " does not exist.\n";
 		return EXIT_FAILURE;
 	}
 
 	fs::path destination_path = args.has("dest") ? args.get("dest") : source_path.string();
 	if (args.has("dry-run")) {
 		if (!fs::exists(destination_path)) {
-			cout << destination_path << " does not exist." << "\n";
-			cout << "Creating " << destination_path << endl;
+			std::cout << destination_path << " does not exist.\n";
+			std::cout << "Creating " << destination_path << "\n";
 		}
 	} else {
 		if (handle_directory_existence(destination_path) == EXIT_FAILURE) {
@@ -67,7 +65,7 @@ main(int argc, char **argv)
 		USER_CONFIG_PATH = args.get("config");
 
 		if (!fs::exists(USER_CONFIG_PATH)) {
-			cerr << USER_CONFIG_PATH << " does not exist." << endl;
+			std::cerr << USER_CONFIG_PATH << " does not exist.\n";
 
 			return EXIT_FAILURE;
 		}
@@ -94,7 +92,7 @@ main(int argc, char **argv)
 	bool skip = args.has("skip");
 
 	if (override && skip) {
-		cerr << "Only one of \"override\" and \"skip\" is allowed at a time." << endl;
+		std::cerr << "Only one of \"override\" and \"skip\" is allowed at a time.\n";
 		return EXIT_FAILURE;
 	}
 

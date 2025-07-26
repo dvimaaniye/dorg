@@ -10,28 +10,25 @@
 inline void
 print_args(std::unordered_map<std::string, std::string> args)
 {
-	using std::cout, std::endl;
-
 	int max_width = 10;
 
 	for (const auto &arg : args) {
 		max_width = std::max((int)arg.first.size(), max_width);
 	}
 
-	cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
+	std::cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
 
 	for (const auto &[key, val] : args) {
-		cout << " " << std::right << std::setw(max_width) << std::setfill(' ') << key << ":";
-		cout << " " << val << " \n";
+		std::cout << " " << std::right << std::setw(max_width) << std::setfill(' ') << key << ":";
+		std::cout << " " << val << " \n";
 	}
 
-	cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
+	std::cout << " " << std::right << std::setw(max_width + 1) << std::setfill('-') << "" << " \n";
 }
 
 inline void
 print_usage(std::string_view prog_name)
 {
-	using std::cout, std::endl;
 	std::cout << "Usage:\n"
 	          << "  " << prog_name << " -s <path>\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-d | --dest <path>]\n"
@@ -50,8 +47,7 @@ print_usage(std::string_view prog_name)
 inline void
 print_options(const std::vector<OptionDescription> &opt_descriptions)
 {
-	using std::cout, std::endl;
-	cout << "Options: " << endl;
+	std::cout << "Options: \n";
 
 	for (const auto &opt_description : opt_descriptions) {
 		std::string short_name =
@@ -78,7 +74,6 @@ print_options(const std::vector<OptionDescription> &opt_descriptions)
 inline void
 print_help(std::string_view prog_name)
 {
-	using std::cout, std::endl;
 	print_usage(prog_name);
 	print_options(option_descriptions);
 }

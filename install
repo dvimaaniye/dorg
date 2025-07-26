@@ -24,10 +24,17 @@ fi
 
 if [[ -n "$ninja_exists" ]]; then
 	echo "🔧 Building with Ninja..."
-	cmake --workflow ninja-full-build
+	if ! cmake --workflow ninja-full-build; then
+		echo "❌ Error build failed..."
+		exit 1
+	fi
 elif [[ -n "$make_exists" ]]; then
 	echo "🔧 Building with Make..."
-	cmake --workflow make-full-build
+	if ! cmake --workflow make-full-build; then
+		echo "❌ Error build failed..."
+		exit 1
+	fi
+	
 fi
 
 install_path=${1:-/usr/local/bin}

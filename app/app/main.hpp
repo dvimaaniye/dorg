@@ -17,7 +17,7 @@ print_default_config()
 
 inline std::unordered_map<std::string, std::string_view>
 make_extension_to_directory_map(
-  const std::unordered_map<std::string, ConfigRule> &rules,
+  const std::unordered_map<std::string, CategoryRule> &rules,
   bool insensitive_case = false
 )
 {

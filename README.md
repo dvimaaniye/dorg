@@ -10,6 +10,7 @@ Before installing, ensure the following dependencies are available on your syste
 - `clang` >= 20 _(Older version might work, but are not tested)_
 
 ## Installation
+Supported OS: GNU/Linux
 #### Step 1. Clone this repo on your system
 ```bash
 git clone --depth 1 https://github.com/dvimaaniye/dorg.git
@@ -20,14 +21,19 @@ git clone --depth 1 https://github.com/dvimaaniye/dorg.git
 cd dorg
 ```
 
-#### Step 3. Ensure that the installation script `install.sh` is executable.
+#### Step 3. Run the installation script.
 ```bash
-chmod +x ./install.sh
+bash install
 ```
+Or
 
-#### Step 4. Run the installation script.
+Ensure that the installation script is executable:
 ```bash
-./install.sh
+chmod +x ./install
+```
+Then execute the installation script:
+```bash
+./install
 ```
 `dorg` should be installed on your system now, yay!
 
