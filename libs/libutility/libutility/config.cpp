@@ -5,6 +5,9 @@
 #include <ryml.hpp>
 #include <ryml_std.hpp>
 #include <sstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace fs = std::filesystem;
 

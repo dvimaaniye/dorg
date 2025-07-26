@@ -1,7 +1,6 @@
 #pragma once
+
 #include <filesystem>
-#include <libutility/category.hpp>
-#include <libutility/config.hpp>
 #include <memory>
 #include <unordered_map>
 #include <vector>

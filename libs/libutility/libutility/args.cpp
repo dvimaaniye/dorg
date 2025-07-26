@@ -1,5 +1,9 @@
-#include <iostream>
+#include <getopt.h>
 #include <libutility/args.hpp>
+#include <libutility/options.hpp>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 Args::Args(const std::vector<Option> options) : options(options)
 {
@@ -30,12 +34,6 @@ Args::Args(const std::vector<Option> options) : options(options)
 	}
 
 	longopts.push_back({nullptr, 0, nullptr, 0});
-	// for (const auto &long_opt : longopts) {
-	// 	std::cout << long_opt.name << ", ";
-	// 	std::cout << long_opt.has_arg << ", ";
-	// 	std::cout << long_opt.flag << ", ";
-	// 	std::cout << (char)long_opt.val << std::endl;
-	// }
 }
 
 void

@@ -1,3 +1,5 @@
+#pragma once
+
 constexpr const char *default_config = R"(# This is the default config.
 # Make a user.yml in the same directory to add or modify categories.
 #

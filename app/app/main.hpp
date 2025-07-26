@@ -1,13 +1,12 @@
 #pragma once
 
 #include <boost/algorithm/string/case_conv.hpp>
+#include <cstdlib>
 #include <iostream>
-#include <libutility/args.hpp>
 #include <libutility/config.hpp>
 #include <libutility/default_config.hpp>
 #include <pwd.h>
 #include <string>
-#include <unistd.h>
 #include <unordered_map>
 
 inline void

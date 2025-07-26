@@ -5,8 +5,12 @@
 #include <iostream>
 #include <liborganizer/organizer.hpp>
 #include <libutility/category.hpp>
+#include <libutility/config.hpp>
 #include <libutility/fs_operations.hpp>
 #include <memory>
+#include <unordered_map>
+
+namespace fs = std::filesystem;
 
 Organizer::Organizer(
   fs::path source,

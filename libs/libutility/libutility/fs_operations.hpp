@@ -10,6 +10,7 @@ inline bool
 handle_directory_existence(const std::string &directory_path, const bool ask_before_creating = true)
 {
 	using std::cin, std::cout, std::cerr, std::endl;
+
 	if (!fs::exists(directory_path)) {
 		cerr << "Directory " << directory_path << " not found" << endl;
 
