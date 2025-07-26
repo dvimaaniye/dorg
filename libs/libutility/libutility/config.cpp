@@ -44,7 +44,7 @@ Config::parse_config(const std::string &config_path)
 	buffer << file_stream.rdbuf();
 	std::string yml_content = buffer.str();
 
-	ryml::Tree tree = ryml::parse_in_arena(ryml::to_csubstr(yml_content));
+	ryml::Tree tree = ryml::parse_in_place(ryml::to_substr(yml_content));
 	ryml::ConstNodeRef root = tree.crootref();
 	ryml::ConstNodeRef categories_node = root["categories"];
 
