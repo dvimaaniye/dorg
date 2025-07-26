@@ -1,6 +1,7 @@
 #include <app/main.hpp>
 #include <filesystem>
 #include <iostream>
+#include <liblogger/logger.hpp>
 #include <liborganizer/organizer.hpp>
 #include <libutility/args.hpp>
 #include <libutility/config.hpp>
@@ -23,29 +24,37 @@ main(int argc, char **argv)
 	Args args(options);
 	args.parse(argc, argv);
 
+	// if quiet and verbose are both set OR are both not set, then set log level to Info
+	if (!(args.has("quiet") ^ args.has("verbose"))) {
+		Logger::level = LogLevel::Info;
+	} else if (args.has("quiet")) {
+		Logger::level = LogLevel::Quiet;
+	} else if (args.has("verbose")) { // doing the check for clarity, logically not required
+		Logger::level = LogLevel::Debug;
+	}
+
 	if (args.has("help")) {
 		print_help(argv[0]);
 		return EXIT_SUCCESS;
 	}
 
-	fs::path current_path = fs::current_path();
 	fs::path source_path = args.get("source");
 	if (source_path.empty()) {
-		std::cerr << "Missing source path.\n";
+		ERROR("Missing source path.\n");
 		print_usage(argv[0]);
 		return EXIT_FAILURE;
 	}
 
 	if (!fs::exists(source_path)) {
-		std::cerr << source_path << " does not exist.\n";
+		ERROR(source_path << " does not exist.\n");
 		return EXIT_FAILURE;
 	}
 
 	fs::path destination_path = args.has("dest") ? args.get("dest") : source_path.string();
 	if (args.has("dry-run")) {
 		if (!fs::exists(destination_path)) {
-			std::cout << destination_path << " does not exist.\n";
-			std::cout << "Creating " << destination_path << "\n";
+			INFO(destination_path << " does not exist.\n");
+			INFO("Creating " << destination_path << "\n");
 		}
 	} else {
 		if (handle_directory_existence(destination_path) == EXIT_FAILURE) {
@@ -65,7 +74,7 @@ main(int argc, char **argv)
 		USER_CONFIG_PATH = args.get("config");
 
 		if (!fs::exists(USER_CONFIG_PATH)) {
-			std::cerr << USER_CONFIG_PATH << " does not exist.\n";
+			ERROR(USER_CONFIG_PATH << " does not exist.\n");
 
 			return EXIT_FAILURE;
 		}
@@ -92,7 +101,7 @@ main(int argc, char **argv)
 	bool skip = args.has("skip");
 
 	if (override && skip) {
-		std::cerr << "Only one of \"override\" and \"skip\" is allowed at a time.\n";
+		ERROR("Only one of \"override\" and \"skip\" is allowed at a time.\n");
 		return EXIT_FAILURE;
 	}
 

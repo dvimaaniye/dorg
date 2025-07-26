@@ -27,5 +27,6 @@ add_subdirectory(external/ryml)
 
 add_subdirectory(libs/libutility)
 add_subdirectory(libs/liborganizer)
+add_subdirectory(libs/liblogger)
 
 add_subdirectory(app)

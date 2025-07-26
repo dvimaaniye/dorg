@@ -3,6 +3,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <filesystem>
 #include <iostream>
+#include <liblogger/logger.hpp>
 #include <liborganizer/organizer.hpp>
 #include <libutility/category.hpp>
 #include <libutility/config.hpp>
@@ -50,7 +51,7 @@ void
 Organizer::apply(OverrideOptions _global_override)
 {
 	if (this->directory_wise_files.empty()) {
-		std::cout << "Nothing to do\n";
+		INFO("Nothing to do\n");
 		return;
 	}
 
@@ -126,10 +127,10 @@ Organizer::decide_override(fs::path file_path, OverrideOptions &directory, Overr
 void
 Organizer::info() const
 {
-	std::cout << "files divided into " << this->directory_wise_files.size() << " directories" << "\n";
+	INFO("files divided into " << this->directory_wise_files.size() << " directories" << "\n");
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		std::cout << "directory: " << directory_name << ", files count: " << files.size() << "\n";
+		INFO("directory: " << directory_name << ", files count: " << files.size() << "\n");
 	}
 	std::cout << std::endl;
 }
@@ -138,15 +139,15 @@ void
 Organizer::show_layout() const
 {
 	if (this->directory_wise_files.empty()) {
-		std::cout << "No layout has been made for " << this->destination << "\n";
+		INFO("No layout has been made for " << this->destination << "\n");
 		return;
 	}
-	std::cout << this->destination << " organized layout: \n";
+	INFO(this->destination << " organized layout: \n");
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		std::cout << "  " << directory_name << ": \n";
+		INFO("  " << directory_name << ": \n");
 		for (const auto &file : files) {
-			std::cout << "    - " << file << "\n";
+			INFO("    - " << file << "\n");
 		}
 	}
 

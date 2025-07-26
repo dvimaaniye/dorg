@@ -1,6 +1,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <liblogger/logger.hpp>
 #include <libutility/config.hpp>
 #include <ryml.hpp>
 #include <ryml_std.hpp>
@@ -35,7 +36,7 @@ Config::parse_config(const std::string &config_path)
 {
 	std::unordered_map<std::string, CategoryRule> rules{};
 	if (!fs::exists(config_path)) {
-		std::cout << "config: " << config_path << " does not exist.\n";
+		DEBUG("config: " << config_path << " does not exist.\n");
 		return rules;
 	}
 

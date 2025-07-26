@@ -35,6 +35,8 @@ print_usage(std::string_view prog_name)
 	          << "  " << std::setw(prog_name.size()) << "" << " [-i | --insensitive-case]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-o | --override]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-k | --skip]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-q | --quiet]\n"
+	          << "  " << std::setw(prog_name.size()) << "" << " [-v | --verbose]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [-h | --help]\n"
 	          << "  " << std::setw(prog_name.size()) << "" << " [--dry-run]\n"
 

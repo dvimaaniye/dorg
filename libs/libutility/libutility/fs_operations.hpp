@@ -3,6 +3,7 @@
 #include <boost/algorithm/string/case_conv.hpp>
 #include <filesystem>
 #include <iostream>
+#include <liblogger/logger.hpp>
 
 namespace fs = std::filesystem;
 
@@ -12,12 +13,14 @@ handle_directory_existence(const std::string &directory_path, const bool ask_bef
 	if (!fs::exists(directory_path)) {
 
 		if (!ask_before_creating) {
-			std::cerr << directory_path << " not found";
-			std::cout << ", creating...";
+			DEBUG(directory_path << " not found. ");
+			UDEBUG("Creating...");
 			fs::create_directories(directory_path);
-			std::cout << "Done!\n";
+			UDEBUG("Done!\n");
 			return EXIT_SUCCESS;
 		}
+
+		INFO(directory_path << " not found.\n");
 
 		std::string user_wants_dir;
 
@@ -26,13 +29,13 @@ handle_directory_existence(const std::string &directory_path, const bool ask_bef
 		boost::to_lower(user_wants_dir);
 
 		if (user_wants_dir == "y") {
-			std::cout << "Creating directory " << directory_path << "\n";
+			INFO("Creating directory " << directory_path << "\n");
 			fs::create_directories(directory_path);
 		} else {
 			return EXIT_FAILURE;
 		}
 	} else if (!fs::is_directory(directory_path)) {
-		std::cerr << directory_path << " is not a directory" << "\n";
+		ERROR(directory_path << " is not a directory" << "\n");
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

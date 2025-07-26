@@ -25,9 +25,8 @@ inline std::vector<OptionDescription> option_descriptions = {
   {"override", "o", no_argument, "", "Override existing files without asking"},
   {"skip", "k", no_argument, "", "Skip existing files without asking"},
   {"dry-run", nullptr, no_argument, "", "Does not move any file or create any directory"},
-  // Need to have a logger in place to implement the following
-  // {"quiet", "q", no_argument, "", "Run without logs (will display errors)"},
-  // {"verbose", "v", no_argument, "", "Logs out more details than in default mode"},
+  {"quiet", "q", no_argument, "", "Run without logs (will display errors)"},
+  {"verbose", "v", no_argument, "", "Logs debug info"},
   {"help", "h", no_argument, "", "Print the help menu"},
 };
 // clang-format on
