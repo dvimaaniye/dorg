@@ -59,6 +59,7 @@ main(int argc, char **argv)
 
 	fs::path destination_path = args.has("dest") ? args.get("dest") : source_path.string();
 	if (fop::handle_directory_existence(destination_path) == EXIT_FAILURE) {
+		ERROR("Destination directory " << destination_path << " does not exist.\n");
 		return EXIT_FAILURE;
 	}
 

@@ -94,7 +94,7 @@ Organizer::decide_override(fs::path file_path, OverrideOptions &directory, Overr
 	}
 
 	// clang-format off
-	std::cout << "file " << file_path << " exists. Override it? \n"
+	std::cout << "\nfile " << file_path << " exists. Override it? \n"
 	        "[ y(yes for this file)/ c(yes for this directory)/ a(yes for all)/ "
 	        "n(skip this file)/ k(skip for directory)/ x(skip for all) ] \n"
 	        "(default: n) ";
@@ -134,7 +134,7 @@ Organizer::info() const
 		INFO("directory: " << directory_name << ", files count: " << files.size() << "\n");
 	}
 
-	INFO("\n");
+	UINFO("\n");
 }
 
 void
@@ -153,5 +153,5 @@ Organizer::show_layout() const
 			DEBUG("    - " << file << "\n");
 		}
 	}
-	DEBUG("\n");
+	UDEBUG("\n");
 }
