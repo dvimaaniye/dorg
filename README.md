@@ -1,5 +1,4 @@
 # Directory Organizer
-#### Video Demo: <URL HERE>
 #### Description: Organizes files in a directory into a set of defined directories
 
 ## Prerequisites
