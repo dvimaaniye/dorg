@@ -16,7 +16,7 @@ namespace fs = std::filesystem;
 Organizer::Organizer(
   fs::path source,
   fs::path destination,
-  std::shared_ptr<const std::unordered_map<std::string, std::string_view>> extension_to_directory
+  std::shared_ptr<const std::unordered_map<std::string, std::string>> extension_to_directory
 ) :
   source(source),
   destination(destination),
@@ -59,16 +59,16 @@ Organizer::apply(OverrideOptions _global_override)
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
 		fs::path directory_path = this->destination / directory_name;
-		handle_directory_existence(directory_path, false);
+		fop::handle_directory_existence(directory_path, false);
 
 		OverrideOptions directory_override = OverrideOptions::NOT_SET;
 
-		for (const auto &file : files) {
-			fs::path file_path = directory_path / file.filename();
+		for (const auto &file_path : files) {
+			fs::path new_file_path = directory_path / file_path.filename();
 
-			if (fs::exists(file_path)) {
+			if (fs::exists(new_file_path)) {
 				OverrideOptions override_decision = decide_override(
-				  file_path, directory_override, global_override
+				  new_file_path, directory_override, global_override
 				);
 
 				if (override_decision == OverrideOptions::SKIP) {
@@ -76,8 +76,9 @@ Organizer::apply(OverrideOptions _global_override)
 				}
 			}
 
-			fs::rename(file, file_path);
+			FS_RENAME(file_path, new_file_path);
 		}
+		UINFO("\n");
 	}
 }
 
@@ -132,24 +133,25 @@ Organizer::info() const
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
 		INFO("directory: " << directory_name << ", files count: " << files.size() << "\n");
 	}
-	std::cout << std::endl;
+
+	INFO("\n");
 }
 
 void
 Organizer::show_layout() const
 {
 	if (this->directory_wise_files.empty()) {
-		INFO("No layout has been made for " << this->destination << "\n");
+		DEBUG("No layout has been made for " << this->destination << "\n");
 		return;
 	}
-	INFO(this->destination << " organized layout: \n");
+
+	DEBUG(this->destination << " organized layout: \n");
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		INFO("  " << directory_name << ": \n");
+		DEBUG("  " << directory_name << ": \n");
 		for (const auto &file : files) {
-			INFO("    - " << file << "\n");
+			DEBUG("    - " << file << "\n");
 		}
 	}
-
-	std::cout << std::endl;
+	DEBUG("\n");
 }

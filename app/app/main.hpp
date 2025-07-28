@@ -15,15 +15,15 @@ print_default_config()
 	std::cout << default_config;
 };
 
-inline std::unordered_map<std::string, std::string_view>
+inline std::unordered_map<std::string, std::string>
 make_extension_to_directory_map(
   const std::unordered_map<std::string, CategoryRule> &rules,
   bool insensitive_case = false
 )
 {
-	std::unordered_map<std::string, std::string_view> extension_to_directory;
+	std::unordered_map<std::string, std::string> extension_to_directory;
 	for (const auto &[_, category] : rules) {
-		std::string_view dir = category.dir;
+		std::string dir = category.dir;
 		for (const auto &extension : category.extensions) {
 			extension_to_directory[insensitive_case ? boost::to_lower_copy(extension) : extension] = dir;
 		}
@@ -33,8 +33,8 @@ make_extension_to_directory_map(
 
 inline void
 extend_extension_to_directory_map(
-  std::unordered_map<std::string, std::string_view> &map1,
-  const std::unordered_map<std::string, std::string_view> &map2,
+  std::unordered_map<std::string, std::string> &map1,
+  const std::unordered_map<std::string, std::string> &map2,
   bool override = true
 )
 {

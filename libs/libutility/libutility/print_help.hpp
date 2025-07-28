@@ -70,7 +70,7 @@ print_options(const std::vector<OptionDescription> &opt_descriptions)
 		          << " " << opt_description.description << "\n";
 	}
 
-	std::cout << std::endl;
+	std::cout << "\n";
 }
 
 inline void

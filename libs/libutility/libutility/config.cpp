@@ -9,7 +9,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace fs = std::filesystem;
+namespace sfs = std::filesystem;
 
 Config::Config(const std::string &config_path)
 {
@@ -35,7 +35,7 @@ std::unordered_map<std::string, CategoryRule>
 Config::parse_config(const std::string &config_path)
 {
 	std::unordered_map<std::string, CategoryRule> rules{};
-	if (!fs::exists(config_path)) {
+	if (!sfs::exists(config_path)) {
 		DEBUG("config: " << config_path << " does not exist.\n");
 		return rules;
 	}
