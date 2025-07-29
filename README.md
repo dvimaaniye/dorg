@@ -1,5 +1,6 @@
 # Directory Organizer
-#### Description: Organizes files in a directory into a set of defined directories
+#### Organizes files in a directory into a set of pre-defined directories (based on file extension)
+#### Video demo: [youtube](https://youtu.be/XtjhkAGHGkM)
 
 ## Prerequisites
 Before installing, ensure the following dependencies are available on your system:
