@@ -5,6 +5,7 @@
 #include <iostream>
 #include <liblogger/logger.hpp>
 #include <liborganizer/organizer.hpp>
+#include <liborganizer/trienode.hpp>
 #include <libutility/category.hpp>
 #include <libutility/config.hpp>
 #include <libutility/fs_operations.hpp>
@@ -13,42 +14,65 @@
 
 namespace fs = std::filesystem;
 
-Organizer::Organizer(
-  fs::path source,
-  fs::path destination,
-  std::shared_ptr<const std::unordered_map<std::string, std::string>> extension_to_directory
-) :
-  source(source),
-  destination(destination),
-  extension_to_directory(extension_to_directory)
+Organizer::Organizer(std::vector<Category> categories, bool insensitive_case)
 {
+
+	reversed_suffix_trie.set_insensitive_case(insensitive_case);
+	this->initialize_trie(categories);
 }
 
 void
-Organizer::organize_in_memory(bool insensitive_case)
+Organizer::initialize_trie(std::vector<Category> categories)
 {
-	for (const auto &file_path : fs::directory_iterator{this->source}) {
-		if (file_path.is_directory() || file_path.is_symlink()) {
-			continue;
-		}
+	for (auto &category : categories) {
+		auto category_name = std::make_shared<std::string>(category.name);
+		auto dir_name = std::make_shared<std::string>(category.dir);
 
-		std::string extension = file_path.path().extension();
-		boost::trim_left_if(extension, boost::is_any_of("."));
-
-		if (insensitive_case) {
-			boost::to_lower(extension);
-		}
-
-		if (this->extension_to_directory->find(extension) != this->extension_to_directory->end()) {
-			this->directory_wise_files[this->extension_to_directory->at(extension)].push_back(
-			  file_path.path()
+		for (auto &extension : category.extensions) {
+			this->reversed_suffix_trie.insert(
+			  extension, std::make_unique<TrieNode>(category_name, dir_name)
 			);
 		}
 	}
 }
 
+std::unordered_map<std::string, std::vector<fs::path>>
+Organizer::dump_structure()
+{
+	return this->directory_wise_files;
+}
+
 void
-Organizer::apply(OverrideOptions _global_override)
+Organizer::organize_in_memory(const std::vector<fs::path> &files)
+{
+	for (const auto &file_path : files) {
+		std::string file_name = file_path.filename();
+
+		auto dir_name = this->reversed_suffix_trie.find_longest_suffix_match(file_name)->directory;
+
+		if (dir_name != nullptr) {
+			this->directory_wise_files[*dir_name].push_back(file_path);
+		}
+	}
+}
+
+void
+Organizer::organize_in_memory(fs::path source)
+{
+	std::vector<fs::path> files{};
+
+	for (const auto &file_iter : fs::directory_iterator{source}) {
+		if (file_iter.is_directory() || file_iter.is_symlink()) {
+			continue;
+		}
+		files.push_back(file_iter.path());
+	}
+
+	this->organize_in_memory(files);
+}
+
+void
+Organizer::apply(fs::path destination, OverrideOptions _global_override)
 {
 	if (this->directory_wise_files.empty()) {
 		INFO("Nothing to do\n");
@@ -58,7 +82,7 @@ Organizer::apply(OverrideOptions _global_override)
 	OverrideOptions global_override = _global_override;
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
-		fs::path directory_path = this->destination / directory_name;
+		fs::path directory_path = destination / directory_name;
 		fop::handle_directory_existence(directory_path, false);
 
 		OverrideOptions directory_override = OverrideOptions::NOT_SET;
@@ -141,11 +165,9 @@ void
 Organizer::show_layout() const
 {
 	if (this->directory_wise_files.empty()) {
-		DEBUG("No layout has been made for " << this->destination << "\n");
+		DEBUG("No layout has been made." << "\n");
 		return;
 	}
-
-	DEBUG(this->destination << " organized layout: \n");
 
 	for (const auto &[directory_name, files] : this->directory_wise_files) {
 		DEBUG("  " << directory_name << ": \n");

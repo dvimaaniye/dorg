@@ -1,32 +1,32 @@
 #pragma once
 
 #include <filesystem>
-#include <memory>
+#include <liborganizer/reversed_suffix_trie.hpp>
+#include <libutility/category.hpp>
 #include <unordered_map>
 #include <vector>
 
-namespace sfs = std::filesystem;
+namespace fs = std::filesystem;
 
 enum class OverrideOptions { NOT_SET, SKIP, OVERWRITE };
 
 class Organizer
 {
 public:
-	Organizer(
-	  sfs::path source,
-	  sfs::path destination,
-	  std::shared_ptr<const std::unordered_map<std::string, std::string>> extension_to_directory
-	);
-	void organize_in_memory(bool insensitive_case = false);
-	void apply(OverrideOptions _global_override = OverrideOptions::NOT_SET);
+	Organizer(std::vector<Category> categories, bool insensitive_case = false);
+
+	void organize_in_memory(fs::path source);
+	void organize_in_memory(const std::vector<fs::path> &files);
+	void apply(fs::path destination, OverrideOptions _global_override = OverrideOptions::NOT_SET);
 	void info() const;
 	void show_layout() const;
+	std::unordered_map<std::string, std::vector<fs::path>> dump_structure();
 
 private:
+	std::unordered_map<std::string, std::vector<fs::path>> directory_wise_files;
+	ReversedSuffixTrie reversed_suffix_trie;
+
+	void initialize_trie(std::vector<Category> categories);
 	OverrideOptions
-	decide_override(sfs::path file_path, OverrideOptions &directory, OverrideOptions &global);
-	std::shared_ptr<const std::unordered_map<std::string, std::string>> extension_to_directory;
-	std::unordered_map<std::string, std::vector<sfs::path>> directory_wise_files;
-	sfs::path source;
-	sfs::path destination;
+	decide_override(fs::path file_path, OverrideOptions &directory, OverrideOptions &global);
 };

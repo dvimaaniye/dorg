@@ -3,10 +3,10 @@
 #include <liblogger/logger.hpp>
 #include <liborganizer/organizer.hpp>
 #include <libutility/args.hpp>
+#include <libutility/category.hpp>
 #include <libutility/config.hpp>
 #include <libutility/fs_operations.hpp>
 #include <libutility/print_help.hpp>
-#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -84,19 +84,8 @@ main(int argc, char **argv)
 	}
 
 	Config user_config(USER_CONFIG_PATH);
-	Config default_config(DEFAULT_CONFIG_PATH);
-	default_config.extend_config(user_config);
-
-	bool insensitive_case = args.has("insensitive-case");
-
-	auto extension_to_directory = make_extension_to_directory_map(
-	  default_config.rules, insensitive_case
-	);
-	auto user_extension_to_directory = make_extension_to_directory_map(
-	  user_config.rules, insensitive_case
-	);
-
-	extend_extension_to_directory_map(extension_to_directory, user_extension_to_directory);
+	Config master_config(DEFAULT_CONFIG_PATH);
+	master_config.extend_config(user_config);
 
 	bool override = args.has("override");
 	bool skip = args.has("skip");
@@ -113,16 +102,20 @@ main(int argc, char **argv)
 		override_option = OverrideOptions::SKIP;
 	}
 
-	auto organizer = Organizer(
-	  source_path,
-	  destination_path,
-	  std::make_shared<std::unordered_map<std::string, std::string>>(extension_to_directory)
-	);
+	std::vector<Category> categories(master_config.rules.size());
 
-	organizer.organize_in_memory(insensitive_case);
+	for (auto &[_, rule] : master_config.rules) {
+		categories.push_back(rule);
+	}
+
+	bool insensitive_case = args.has("insensitive-case");
+
+	auto organizer = Organizer(categories, insensitive_case);
+
+	organizer.organize_in_memory(source_path);
 	organizer.info();
 	organizer.show_layout();
-	organizer.apply(override_option);
+	organizer.apply(destination_path, override_option);
 
 	return EXIT_SUCCESS;
 }

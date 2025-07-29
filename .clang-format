@@ -23,6 +23,7 @@ AlignEscapedNewlines: LeftWithLastLine
 AlignAfterOpenBracket: BlockIndent
 
 AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: None
 
 BinPackArguments: false
 BinPackParameters: OnePerLine

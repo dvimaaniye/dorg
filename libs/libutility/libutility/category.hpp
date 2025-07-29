@@ -3,9 +3,12 @@
 #include <string>
 #include <vector>
 
-struct CategoryRule {
+struct Category {
 	std::string name;
 	std::string dir;
-	bool override = false;
 	std::vector<std::string> extensions;
+};
+
+struct CategoryRule : Category {
+	bool override = false;
 };
