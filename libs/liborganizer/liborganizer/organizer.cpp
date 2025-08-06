@@ -24,14 +24,13 @@ Organizer::Organizer(std::vector<Category> categories, bool insensitive_case)
 void
 Organizer::initialize_trie(std::vector<Category> categories)
 {
-	for (auto &category : categories) {
+	for (auto category : categories) {
 		auto category_name = std::make_shared<std::string>(category.name);
 		auto dir_name = std::make_shared<std::string>(category.dir);
+		auto data = std::make_shared<TrieData>(category_name, dir_name);
 
 		for (auto &extension : category.extensions) {
-			this->reversed_suffix_trie.insert(
-			  extension, std::make_unique<TrieNode>(category_name, dir_name)
-			);
+			this->reversed_suffix_trie.insert(extension, data);
 		}
 	}
 }
@@ -48,8 +47,12 @@ Organizer::organize_in_memory(const std::vector<fs::path> &files)
 	for (const auto &file_path : files) {
 		std::string file_name = file_path.filename();
 
-		auto dir_name = this->reversed_suffix_trie.find_longest_suffix_match(file_name)->directory;
+		auto match = this->reversed_suffix_trie.find_longest_suffix_match(file_name);
+		if (!match || !match->data) {
+			continue;
+		}
 
+		auto dir_name = match->data->directory;
 		if (dir_name != nullptr) {
 			this->directory_wise_files[*dir_name].push_back(file_path);
 		}

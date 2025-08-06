@@ -1,4 +1,3 @@
-#include <cctype>
 #include <liborganizer/reversed_suffix_trie.hpp>
 #include <liborganizer/trienode.hpp>
 #include <memory>
@@ -25,11 +24,11 @@ ReversedSuffixTrie::get(TrieNode *node, char key)
 	// in insensitive case, first the key is normalized to lowercase
 	// if lowercase key is not found then uppercase key is tried
 	// therefore, JPG will be treated as jpg
-	return node->has(tolower(key)) ? node->get(tolower(key)) : node->get(toupper(key));
+	return node->has(std::tolower(key)) ? node->get(std::tolower(key)) : node->get(std::toupper(key));
 }
 
 void
-ReversedSuffixTrie::insert(std::string suffix, std::unique_ptr<TrieNode> node)
+ReversedSuffixTrie::insert(std::string suffix, std::shared_ptr<TrieData> data)
 {
 	if (suffix.empty()) {
 		return;
@@ -37,16 +36,15 @@ ReversedSuffixTrie::insert(std::string suffix, std::unique_ptr<TrieNode> node)
 
 	auto current = root.get();
 
-	for (auto it = suffix.rbegin(); it != suffix.rend() - 1; ++it) {
-		if (!current->has(*it)) {
-			current->insert(*it, std::make_unique<TrieNode>());
+	for (auto char_it = suffix.rbegin(); char_it != suffix.rend(); ++char_it) {
+		if (!current->has(*char_it)) {
+			current->insert(*char_it, std::make_unique<TrieNode>());
 		}
 
-		current = current->get(*it);
+		current = current->get(*char_it);
 	}
 
-	node->set_end();
-	current->insert(suffix[0], std::move(node));
+	current->make_end(data);
 }
 
 TrieNode *
@@ -59,8 +57,8 @@ ReversedSuffixTrie::find_longest_suffix_match(std::string word)
 	auto current = root.get();
 	TrieNode *last_match = nullptr;
 
-	for (auto it = word.rbegin(); it != word.rend(); ++it) {
-		current = this->get(current, *it);
+	for (auto char_it = word.rbegin(); char_it != word.rend(); ++char_it) {
+		current = this->get(current, *char_it);
 		if (current == nullptr) {
 			break;
 		}

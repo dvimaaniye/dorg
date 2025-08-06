@@ -10,7 +10,7 @@ public:
 	ReversedSuffixTrie();
 
 	void set_insensitive_case(bool c = true);
-	void insert(std::string suffix, std::unique_ptr<TrieNode> node);
+	void insert(std::string suffix, std::shared_ptr<TrieData> data);
 	TrieNode *find_longest_suffix_match(std::string word);
 
 private:
