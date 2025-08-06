@@ -2,32 +2,44 @@ categories:
   - name: cg
     dir: cg
     extensions:
-      - blender
-      - 3ds
-      - fbx
+      - .blender
+      - .3ds
+      - .fbx
 
   - name: shell-scripts
     extensions:
-      - sh
+      - .sh
 
-  - name: no-extension
-    extensions:
-      - ""
-
-  # - name: jpg
-  #   dir: photo/jpg
+  # not working after trie implementation, 
+  # need to implement special categories
+  # - name: no-extension
   #   extensions:
-  #     - jpg
-  #     - jpeg
-  #     - JPG
+  #     - ""
+
+  - name: code
+    extensions:
+      - .c
+      - .cpp
+      - .css
+      - .html
+      - .go
+      - .js
+      - .py
+      - .php
+      - .ts
 
   - name: pdf
     extensions: 
-      - pdf
+      - .pdf
 
-  - name: font
+  - name: jpg
+    dir: photo/jpg
     extensions:
-      - ttf
-      - otf
-      - woff
-      - woff2
+      - .jpg
+      - .jpeg
+      - .JPG
+
+  - name: tests
+    dir: tests
+    extensions:
+      - test.cpp

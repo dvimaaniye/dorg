@@ -18,6 +18,7 @@ public:
 		  {"audio", "audio", {".mp3", ".wav", ".ogg"}},
 		  {"video", "video", {".mp4", ".mkv", ".mov"}},
 		  {"photo", "photo", {".jpg", ".png", ".webp"}},
+		  {"jpeg", "photo/jpeg", {".jpeg"}},
 		  {"documents", "docs", {".doc", ".docx", ".odt"}},
 		  {"tests", "tests", {".test.cpp", "_test.cpp"}},
 		  {"code", "code", {".cpp", ".c", ".py", ".js", ".ts", ".html", ".css", ".go", ".php"}},
