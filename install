@@ -38,7 +38,10 @@ elif [[ -n "$make_exists" ]]; then
 fi
 
 install_path=${1:-/usr/local/bin}
-sudo cp ./build/app/app "$install_path/dorg"
+if ! sudo cp ./build/app/app "$install_path/dorg"; then
+	echo >&2 "⚠️ Installation incomplete. Copy $(pwd)/build/app/app to system's installation path manually."
+	exit 2
+fi
 
 if ! command -v dorg &> /dev/null; then
 	echo >&2 "⚠️ Installation failed. Try copying $(pwd)/build/app/app to system's installation path manually."
